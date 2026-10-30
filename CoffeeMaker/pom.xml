@@ -45,6 +45,11 @@
                     <targetClasses>
                         <param>edu.towson.cis.cosc442.project4.coffeemaker.*</param>
                     </targetClasses>
+                    <mutationThreshold>80</mutationThreshold>
+
+                    <targetClasses>
+                        <param>edu.towson.cis.cosc442.project4.coffeemaker.*</param>
+                    </targetClasses>
 
                         <excludedClasses>
                     <param>edu.towson.cis.cosc442.project4.coffeemaker.Main</param>
