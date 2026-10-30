@@ -3,6 +3,9 @@ package edu.towson.cis.cosc442.project4.coffeemaker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
@@ -10,20 +13,31 @@ class CoffeeMakerTest {
     CoffeeMaker coffeeMaker;
     Recipe chai;
     Recipe dirtyChai;
+    Inventory inventory;
     
 
     @BeforeEach 
     void setUp() {
         //ARRANGE
         coffeeMaker = new CoffeeMaker();
+        inventory = new Inventory();
 
+        //ARRANGE
         chai = new Recipe();
         chai.setName("Chai Latte");
         chai.setPrice(4);
+        chai.setAmtChocolate(1);
+        chai.setAmtCoffee(2);
+        chai.setAmtMilk(2);
+        chai.setAmtSugar(1);
 
         dirtyChai = new Recipe();
         dirtyChai.setName("Dirty Chai Latte");
         dirtyChai.setPrice(5);
+        dirtyChai.setAmtChocolate(1);
+        dirtyChai.setAmtCoffee(3);
+        dirtyChai.setAmtMilk(1);
+        dirtyChai.setAmtSugar(1);
     }
 
     @AfterEach 
@@ -111,20 +125,32 @@ class CoffeeMakerTest {
     }
 
     // add inventory
-    @Test
-    public void addZeroInventoryTest() {
+    @ParameterizedTest 
+    @CsvSource({
+        "0, 1, 1, 1",    
+        "1, 0, 1, 1",    
+        "1, 1, 0, 1",
+        "1, 1, 1, 0",   
+    })
+    public void addZeroInventoryTest(int amtCoffee, int amtMilk, int amtSugar, int amtChocolate) {
         //ASSERT
-        assertTrue(coffeeMaker.addInventory(0,10,10,10));
+        assertTrue(coffeeMaker.addInventory(amtCoffee, amtMilk, amtSugar, amtChocolate));
     }
 
-    @Test
-    public void addNegativeInventoryTest() {
+    @ParameterizedTest 
+    @CsvSource({
+        "-1, 1, 1, 1",    
+        "1, -1, 1, 1",    
+        "1, 1, -1, 1",
+        "1, 1, 1, -1",   
+    })
+    public void addNegativeInventoryTest(int amtCoffee, int amtMilk, int amtSugar, int amtChocolate) {
         //ASSERT
-        assertFalse(coffeeMaker.addInventory(-10,10,10,10));
+        assertFalse(coffeeMaker.addInventory(amtCoffee, amtMilk, amtSugar, amtChocolate));
     }
 
 
-    // add inventory
+   
     @Test
     public void checkInventoryTest() {
         //ACT
@@ -164,8 +190,54 @@ class CoffeeMakerTest {
     }
 
 
+
+//---Can make coffee
+    @Test 
+    public void canMakeCoffeeWithEnoughChocolateTest() {
+        //ARRANGE
+        inventory.setChocolate(5);
+        //ACT
+        coffeeMaker.makeCoffee(chai, chai.getPrice());
+        //ASSERT
+        assertEquals(4, inventory.getChocolate());
+    }
+
+
+    @Test 
+    public void canMakeCoffeeWithEnoughCoffeeTest() {
+        //ARRANGE
+        inventory.setCoffee(5);
+        //ACT
+        coffeeMaker.makeCoffee(chai, chai.getPrice());
+        //ASSERT
+        assertEquals(3, inventory.getCoffee());
+    }
+
+
+    @Test 
+    public void canMakeCoffeeWithEnoughMilkTest() {
+        //ARRANGE
+        inventory.setMilk(5);
+        //ACT
+        coffeeMaker.makeCoffee(chai, chai.getPrice());
+        //ASSERT
+        assertEquals(3, inventory.getMilk());
+    }
+
+
+    @Test 
+    public void canMakeCoffeeWithEnoughSugarTest() {
+        //ARRANGE
+        inventory.setSugar(5);
+        //ACT
+        coffeeMaker.makeCoffee(chai, chai.getPrice());
+        //ASSERT
+        assertEquals(4, inventory.getSugar());
+    }
+
     // I skipped the checkInventory method cause there isn't really any code to test
     // There was only a single return function
+    // But it was used in other test methods
 
 
     @Test
@@ -183,4 +255,7 @@ class CoffeeMakerTest {
         //ASSERT
         assertNull(coffeeMaker.getRecipeForName("Non-Existing Name").getName());
     }
+
+
+
 }

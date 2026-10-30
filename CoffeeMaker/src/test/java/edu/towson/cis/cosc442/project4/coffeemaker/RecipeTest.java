@@ -13,6 +13,7 @@ public class RecipeTest {
     Recipe recipe;
     Recipe copycatRecipe;
     Recipe notACopycatRecipe;
+    Recipe nullRecipe;
 
     @BeforeEach 
     void setUp() {
@@ -25,6 +26,9 @@ public class RecipeTest {
 
        notACopycatRecipe = new Recipe();
        notACopycatRecipe.setName("Frappucino");
+
+       nullRecipe = new Recipe();
+       nullRecipe.setName(null);
     }
 
     @AfterEach 
@@ -133,8 +137,21 @@ public class RecipeTest {
     }
 
     @Test
+    public void sameNameEqualsNull() {
+        //ASSERT
+        assertFalse(nullRecipe.equals(recipe));
+    }
+
+    @Test
     public void differentNameEqualsTest() {
         //ASSERT
         assertFalse(recipe.equals(notACopycatRecipe));
+    }
+
+
+    @Test
+    public void toStringTest() {
+        //ASSERT
+        assertEquals("Espresso", recipe.toString());
     }
 }

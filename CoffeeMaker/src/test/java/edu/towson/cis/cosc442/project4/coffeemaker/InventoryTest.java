@@ -48,8 +48,10 @@ public class InventoryTest {
     @ParameterizedTest 
     @CsvSource({
         "5, 5",    // positive
+        "1, 1",    // positive
         "0, 0",    // zero
-        "-1, 0"    // negative: stays at 0
+        "-1, 0",    // negative: stays at 0
+        "-5, 0",    // negative: stays at 0
     })
     public void getAndSetInventoryChocolateTest(int input, int expected) {
         //ACT
@@ -114,6 +116,17 @@ public class InventoryTest {
     }
 
     @Test 
+    public void isJustEnoughIngredients() {
+        inventory.setChocolate(1);
+        inventory.setCoffee(2);
+        inventory.setMilk(1);
+        inventory.setSugar(1);
+       
+        assertTrue(inventory.enoughIngredients(recipe));
+
+    }
+
+    @Test 
     public void isNotEnoughChocolateIngredients() {
         //the rest of the ingredients are default set to 15
         inventory.setChocolate(0);
@@ -124,7 +137,7 @@ public class InventoryTest {
     @Test 
     public void isNotEnoughCoffeeIngredients() {
         //the rest of the ingredients are default set to 15
-        inventory.setCoffee(0);
+        inventory.setCoffee(1);
 
         assertFalse(inventory.enoughIngredients(recipe));
     }
