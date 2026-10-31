@@ -255,7 +255,4 @@ class CoffeeMakerTest {
         //ASSERT
         assertNull(coffeeMaker.getRecipeForName("Non-Existing Name").getName());
     }
-
-
-
 }
