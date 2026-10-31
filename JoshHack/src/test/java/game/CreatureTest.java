@@ -1,9 +1,9 @@
 package game;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.After;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import java.awt.Color;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class CreatureTest {
 
@@ -12,7 +12,7 @@ public class CreatureTest {
 	Tile[][][] myTiles;
 	Item myItem;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
 		myTiles = new Tile[1][1][1];
 		myWorld = new World(myTiles);
@@ -20,7 +20,7 @@ public class CreatureTest {
 		myPlayerCreature = new Creature(myWorld, '@', Color.RED, "Testing", 100, 15, 10);
 	}
 
-	@After
+	@AfterEach
 	public void tearDown() {
 		myTiles = null;
 		myWorld = null;
