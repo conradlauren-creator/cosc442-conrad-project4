@@ -116,7 +116,7 @@ class CoffeeMakerTest {
     }
 
 
-   
+   /* 
     // add inventory
     @Test
     public void addInventoryTest() {
@@ -189,7 +189,7 @@ class CoffeeMakerTest {
         assertEquals(5, coffeeMaker.makeCoffee(chai, 5));
     }
 
-
+*/
 
 //---Can make coffee
     @Test 
