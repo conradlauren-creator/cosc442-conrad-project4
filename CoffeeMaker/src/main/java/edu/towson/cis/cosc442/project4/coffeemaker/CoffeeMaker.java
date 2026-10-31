@@ -158,8 +158,7 @@ public class CoffeeMaker {
         }
         if (canMakeCoffee) {
             // I changed the following line from + to - as it was an error and causing my tests to crash
-            //I changed setCoffee line to be a + in order to insert a bug
-            inventory.setCoffee(inventory.getCoffee() + r.getAmtCoffee());
+            inventory.setCoffee(inventory.getCoffee() - r.getAmtCoffee());
             inventory.setMilk(inventory.getMilk() - r.getAmtMilk());
             inventory.setSugar(inventory.getSugar() - r.getAmtSugar());
             inventory.setChocolate(inventory.getChocolate() - r.getAmtChocolate());
