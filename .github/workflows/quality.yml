@@ -1,4 +1,4 @@
-name: CoffeeMaker Quality Checks
+name: Quality Checks
 
 on:
   push:
@@ -7,13 +7,11 @@ on:
       - main
 
 jobs:
-  test:
+  coffeemaker:
     runs-on: ubuntu-latest
-
     defaults:
       run:
         working-directory: CoffeeMaker
-
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -25,22 +23,44 @@ jobs:
           java-version: '25'
           cache: maven
 
-      - name: Make Maven wrapper executable
-        run: chmod +x mvnw
-
       - name: Run JUnit regression tests
         run: ./mvnw test
 
-      # Add PIT mutation testing later
-
       - name: Run PIT mutation testing
-        run: ./mvnw test-compile org.pitest:pitest-maven:mutationCoverage
+        run: ./mvnw pitest:mutationCoverage
 
-      # Add PIT report artifact upload later
-      
       - name: Upload PIT report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: pit-report
-          path: target/pit-reports/
+          name: coffeemaker-pit-report
+          path: CoffeeMaker/target/pit-reports
+
+  joshhack:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: JoshHack
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+
+      - name: Run JUnit regression tests
+        run: ./mvnw test
+
+      - name: Run PIT mutation testing
+        run: ./mvnw pitest:mutationCoverage
+
+      - name: Upload PIT report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: joshhack-pit-report
+          path: JoshHack/target/pit-reports
