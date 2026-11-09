@@ -18,15 +18,14 @@ public class CreatureTest {
 	@BeforeEach
 	public void setUp() {
 		
-		//I used AI to add the myTiles part because my isDead tests kept crashing for no reason and I had no clue what was going on
-		//This did not impact my exam answers at all
+		//ARRANGE
 		myTiles = new Tile[3][3][1];
+
 		for (int x = 0; x < 3; x++) {
 			for (int y = 0; y < 3; y++) {
-				myTiles[x][y][0] = Tile.FLOOR;  
+				myTiles[x][y][0] = Tile.FLOOR;
 			}
 		}
-		//end
 
 		myWorld = new World(myTiles);
 		myItem = new Item('A',Color.BLUE,"string1", "string2");
@@ -39,6 +38,13 @@ public class CreatureTest {
 		myWorld = null;
 		myPlayerCreature = null;
 	}
+
+	@Test 
+	public void testCreatureFoodInitialization() {
+		//assert
+		assertEquals(1000/3*2, myPlayerCreature.food());
+	}
+
 
 	@Test
 	public void testAdd_ModifyAttackValue() {

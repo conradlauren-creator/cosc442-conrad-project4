@@ -41,6 +41,11 @@ public class CombatRulesTest {
 	}
 
     @Test 
+	public void isGreaterThanOneDeadTest() {
+        assertFalse(combatRules.isDead(10));
+	}
+
+    @Test 
     public void isEqualToOneDeadTest() {
         assertFalse(combatRules.isDead(1));
 	}
