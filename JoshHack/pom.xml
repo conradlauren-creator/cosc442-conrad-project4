@@ -75,6 +75,16 @@
                     <classpathScope>compile</classpathScope>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>4.9.8.2</version>
+                <configuration>
+                    <xmlOutput>true</xmlOutput>
+                    <sarifOutput>true</sarifOutput>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
