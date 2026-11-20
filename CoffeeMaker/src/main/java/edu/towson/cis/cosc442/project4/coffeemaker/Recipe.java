@@ -142,22 +142,24 @@ public class Recipe {
 
     /**
      * Determines if this recipe has the same name as another recipe, returning
-     * false if either name is null.
-     * 
-     * @param r The recipe to compare against.
-     * @return True if both recipes have non-null equal names; false otherwise.
+     * false if either name is null or the object is not a recipe.
      */
-    public boolean equals(Recipe r) {
-        if (r.getName() == null) {
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof Recipe)) {
             return false;
         }
-        if (this.name == null) {
+
+        Recipe other = (Recipe) object;
+        if (name == null || other.name == null) {
             return false;
         }
-        if ((this.name).equals(r.getName())) {
-            return true;
-        }
-        return false;
+        return name.equals(other.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return name == null ? 0 : name.hashCode();
     }
 
     /**
