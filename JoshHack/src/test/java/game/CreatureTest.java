@@ -186,11 +186,12 @@ public class CreatureTest {
 	}
 
 	@Test
-	public void attackWhenDefenseExceedsAttackStillDocumentsOneDamageRule() {
+	public void combatWhenAttackerAttackIsLowerThanDefenderDefense() {
 		Creature defender = new Creature(myWorld, 'C', Color.RED, "defender", 100, 5, 20);
 		defender.setCreatureAi(new CreatureAi(defender));
 		myPlayerCreature.setCreatureAi(new CreatureAi(myPlayerCreature));
 
+		assertTrue(myPlayerCreature.attackValue() < defender.defenseValue());
 		myPlayerCreature.meleeAttack(defender);
 
 		assertEquals(99, defender.hp());
