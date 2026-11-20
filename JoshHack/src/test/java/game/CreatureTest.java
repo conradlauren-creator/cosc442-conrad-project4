@@ -106,5 +106,110 @@ public class CreatureTest {
 		assertEquals("Stabbed", myPlayerCreature.causeOfDeath());
     }
 
+	@Test
+	public void creatureDimensionAndStateGettersReportValues() {
+		assertEquals('@', myPlayerCreature.glyph());
+		assertEquals(Color.RED, myPlayerCreature.color());
+		assertEquals(100, myPlayerCreature.maxHp());
+		assertEquals(100, myPlayerCreature.hp());
+		assertEquals(15, myPlayerCreature.attackValue());
+		assertEquals(10, myPlayerCreature.defenseValue());
+		assertEquals(9, myPlayerCreature.visionRadius());
+		assertEquals("Testing", myPlayerCreature.name());
+	}
+
+	@Test
+	public void manaIsClampedToMaximum() {
+		myPlayerCreature.modifyMana(100);
+		assertEquals(5, myPlayerCreature.mana());
+
+		myPlayerCreature.modifyMana(-100);
+		assertEquals(0, myPlayerCreature.mana());
+	}
+
+	@Test
+	public void modifyMaxManaAndManaSupportMaximumChanges() {
+		myPlayerCreature.modifyMaxMana(5);
+		assertEquals(10, myPlayerCreature.maxMana());
+
+		myPlayerCreature.modifyMana(5);
+		assertEquals(10, myPlayerCreature.mana());
+	}
+
+	@Test
+	public void weaponAndArmorContributeToEffectiveValues() {
+		Item weapon = new Item(')', Color.WHITE, "sword", null);
+		weapon.modifyAttackValue(10);
+		Item armor = new Item('[', Color.BLUE, "armor", null);
+		armor.modifyDefenseValue(6);
+		myPlayerCreature.setCreatureAi(new CreatureAi(myPlayerCreature));
+
+		myPlayerCreature.inventory().add(weapon);
+		myPlayerCreature.inventory().add(armor);
+		myPlayerCreature.equip(weapon);
+		myPlayerCreature.equip(armor);
+
+		assertEquals(25, myPlayerCreature.attackValue());
+		assertEquals(16, myPlayerCreature.defenseValue());
+	}
+
+	@Test
+	public void movementToEmptyTileUpdatesCreatureCoordinates() {
+		myPlayerCreature.setCreatureAi(new CreatureAi(myPlayerCreature));
+		myPlayerCreature.x = 1;
+		myPlayerCreature.y = 1;
+		myPlayerCreature.z = 0;
+		myWorld.add(myPlayerCreature);
+
+		myPlayerCreature.moveBy(1, 0, 0);
+
+		assertEquals(2, myPlayerCreature.x);
+		assertEquals(1, myPlayerCreature.y);
+		assertEquals(665, myPlayerCreature.food());
+	}
+
+	@Test
+	public void movementIntoWallDoesNotChangeCoordinates() {
+		myTiles[1][1][0] = Tile.WALL;
+		myWorld = new World(myTiles);
+		myPlayerCreature = new Creature(myWorld, '@', Color.RED, "Testing", 100, 15, 10);
+		myPlayerCreature.setCreatureAi(new CreatureAi(myPlayerCreature));
+		myPlayerCreature.x = 0;
+		myPlayerCreature.y = 1;
+		myPlayerCreature.z = 0;
+		myWorld.add(myPlayerCreature);
+
+		myPlayerCreature.moveBy(1, 0, 0);
+
+		assertEquals(0, myPlayerCreature.x);
+		assertEquals(1, myPlayerCreature.y);
+	}
+
+	@Test
+	public void attackWhenDefenseExceedsAttackStillDocumentsOneDamageRule() {
+		Creature defender = new Creature(myWorld, 'C', Color.RED, "defender", 100, 5, 20);
+		defender.setCreatureAi(new CreatureAi(defender));
+		myPlayerCreature.setCreatureAi(new CreatureAi(myPlayerCreature));
+
+		myPlayerCreature.meleeAttack(defender);
+
+		assertEquals(99, defender.hp());
+	}
+
+	@Test
+	public void killingCreatureRemovesItFromWorld() {
+		Creature defender = new Creature(myWorld, 'C', Color.RED, "defender", 1, 5, 0);
+		defender.setCreatureAi(new CreatureAi(defender));
+		defender.x = 1;
+		defender.y = 1;
+		defender.z = 0;
+		myWorld.add(defender);
+		myPlayerCreature.setCreatureAi(new CreatureAi(myPlayerCreature));
+
+		myPlayerCreature.meleeAttack(defender);
+
+		assertTrue(defender.hp() < 1);
+		assertEquals(null, myWorld.creature(1, 1, 0));
+	}
 }
 
