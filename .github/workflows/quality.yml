@@ -6,6 +6,10 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  security-events: write
+
 jobs:
   coffeemaker:
     runs-on: ubuntu-latest
@@ -25,6 +29,16 @@ jobs:
 
       - name: Run JUnit regression tests
         run: ./mvnw test
+
+      - name: Run SpotBugs analysis
+        run: ./mvnw spotbugs:spotbugs
+
+      - name: Upload SpotBugs SARIF results
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: CoffeeMaker/target/spotbugsSarif.json
+          category: coffeemaker-spotbugs
 
       - name: Run PIT mutation testing
         run: ./mvnw pitest:mutationCoverage
@@ -64,3 +78,13 @@ jobs:
         with:
           name: joshhack-pit-report
           path: JoshHack/target/pit-reports
+
+      - name: Run SpotBugs analysis
+        run: ./mvnw spotbugs:spotbugs
+
+      - name: Upload SpotBugs SARIF results
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: JoshHack/target/spotbugsSarif.json
+          category: joshhack-spotbugs

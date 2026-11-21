@@ -148,6 +148,15 @@ public class RecipeTest {
         assertFalse(recipe.equals(notACopycatRecipe));
     }
 
+    @Test
+    public void equalsReturnsFalseForDifferentObjectType() {
+        assertFalse(recipe.equals("Espresso"));
+    }
+
+    @Test
+    public void equalRecipeNamesHaveSameHashCode() {
+        assertEquals(recipe.hashCode(), copycatRecipe.hashCode());
+    }
 
     @Test
     public void toStringTest() {
