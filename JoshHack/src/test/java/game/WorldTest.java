@@ -80,6 +80,16 @@ public class WorldTest {
     }
 
     @Test
+    public void itemCanBeRemovedByCoordinates() {
+        Item item = new Item('r', Color.RED, "rock", null);
+        assertTrue(world.addAtEmptySpace(item, 1, 1, 0));
+
+        world.remove(1, 1, 0);
+
+        assertEquals(null, world.item(1, 1, 0));
+    }
+
+    @Test
     public void itemCanBePlacedInNearbyEmptySpace() {
         Item occupied = new Item('a', Color.BLUE, "occupied", null);
         Item dropped = new Item('b', Color.GREEN, "dropped", null);
